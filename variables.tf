@@ -46,7 +46,7 @@ variable "create_public_subnets" {
 variable "create_private_subnets" {
   description = "Set to true if the private subnets should be created, false otherwise"
   type        = bool
-  default     = false
+  default     = null
 }
 
 variable "create_public_route_table" {
@@ -58,7 +58,7 @@ variable "create_public_route_table" {
 variable "create_private_route_table" {
   description = "Controls if an Private Route Table is created for private subnets"
   type        = bool
-  default     = false
+  default     = null
 }
 
 variable "azs" {
@@ -70,7 +70,7 @@ variable "azs" {
 variable "map_public_ip_on_launch" {
   description = "Specify true to indicate that instances launched into the subnet should be assigned a public IP address. Default is `false`"
   type        = bool
-  default     = false
+  default     = null
 }
 
 ########## EIP ##########
@@ -86,7 +86,7 @@ variable "create_eip" {
 variable "create_nat" {
   description = "Set to true if the NAT Gateway should be created, false otherwise"
   type        = bool
-  default     = false
+  default     = null
 }
 
 ########## Tags ##########
