@@ -39,10 +39,10 @@ resource "aws_internet_gateway" "igw" {
 resource "aws_subnet" "public" {
   count = var.create_public_subnets ? length(var.public_subnets) : 0
 
-  vpc_id            = aws_vpc.vpc.id
-  cidr_block        = var.public_subnets[count.index]
+  vpc_id                  = aws_vpc.vpc.id
+  cidr_block              = var.public_subnets[count.index]
   map_public_ip_on_launch = var.map_public_ip_on_launch
-  availability_zone = length(regexall("^[a-z]{2}-", element(var.azs, count.index))) > 0 ? element(var.azs, count.index) : null
+  availability_zone       = length(regexall("^[a-z]{2}-", element(var.azs, count.index))) > 0 ? element(var.azs, count.index) : null
 
   tags = merge(
     {
