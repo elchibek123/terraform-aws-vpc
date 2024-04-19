@@ -41,6 +41,7 @@ resource "aws_subnet" "public" {
 
   vpc_id            = aws_vpc.vpc.id
   cidr_block        = var.public_subnets[count.index]
+  map_public_ip_on_launch = var.map_public_ip_on_launch
   availability_zone = length(regexall("^[a-z]{2}-", element(var.azs, count.index))) > 0 ? element(var.azs, count.index) : null
 
   tags = merge(
