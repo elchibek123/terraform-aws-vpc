@@ -13,7 +13,7 @@ resource "aws_vpc" "vpc" {
 
   tags = merge(
     {
-      "Name" = "${var.env}-${var.region_name}-vpc"
+      "Name" = "${var.environment}-${var.aws_region}-vpc"
     },
     var.tags,
   )
@@ -28,7 +28,7 @@ resource "aws_internet_gateway" "igw" {
 
   tags = merge(
     {
-      "Name" = "${var.env}-${var.region_name}-vpc-igw"
+      "Name" = "${var.environment}-${var.aws_region}-vpc-igw"
     },
     var.tags,
   )
@@ -46,20 +46,20 @@ resource "aws_subnet" "public" {
 
   tags = merge(
     {
-      "Name" = format("%s-%s-vpc-public-subnet-%s", var.env, var.region_name, count.index + 1)
+      "Name" = format("%s-%s-vpc-public-subnet-%s", var.environment, var.aws_region, count.index + 1)
     },
     var.tags
   )
 }
 
 resource "aws_route_table" "public" {
-  count = var.create_public_route_table ? 1 : 0
+  count = var.create_public_subnets ? 1 : 0
 
   vpc_id = aws_vpc.vpc.id
 
   tags = merge(
     {
-      "Name" = "${var.env}-${var.region_name}-vpc-pblc-rtbl"
+      "Name" = "${var.environment}-${var.aws_region}-vpc-pblc-rtbl"
     },
     var.tags,
   )
@@ -95,19 +95,19 @@ resource "aws_subnet" "private" {
 
   tags = merge(
     {
-      "Name" = format("%s-%s-vpc-private-subnet-%s", var.env, var.region_name, count.index + 1)
+      "Name" = format("%s-%s-vpc-private-subnet-%s", var.environment, var.aws_region, count.index + 1)
     },
     var.tags,
   )
 }
 
 resource "aws_route_table" "private" {
-  count  = var.create_private_route_table ? 1 : 0
+  count  = var.create_private_subnets ? 1 : 0
   vpc_id = aws_vpc.vpc.id
 
   tags = merge(
     {
-      "Name" = "${var.env}-${var.region_name}-vpc-prvt-rtbl"
+      "Name" = "${var.environment}-${var.aws_region}-vpc-prvt-rtbl"
     },
     var.tags,
   )
@@ -121,7 +121,7 @@ resource "aws_route_table_association" "private" {
 }
 
 resource "aws_route" "private_route" {
-  count                  = var.create_private_subnets ? 1 : 0
+  count                  = var.create_nat ? 1 : 0
   route_table_id         = aws_route_table.private[0].id
   destination_cidr_block = "0.0.0.0/0"
   nat_gateway_id         = aws_nat_gateway.nat_gateway[count.index].id
@@ -135,13 +135,13 @@ resource "aws_route" "private_route" {
 ########## AWS EIP ##########
 
 resource "aws_eip" "eip" {
-  count  = var.create_eip ? 1 : 0
+  count  = var.create_nat ? 1 : 0
   domain = "vpc"
 
 
   tags = merge(
     {
-      "Name" = "nat-${var.env}-${var.region_name}-vpc-eip"
+      "Name" = "nat-${var.environment}-${var.aws_region}-vpc-eip"
     },
     var.tags,
   )
@@ -159,7 +159,7 @@ resource "aws_nat_gateway" "nat_gateway" {
 
   tags = merge(
     {
-      "Name" = "${var.env}-${var.region_name}-vpc-nat"
+      "Name" = "${var.environment}-${var.aws_region}-vpc-nat"
     },
     var.tags,
   )

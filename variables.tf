@@ -8,7 +8,7 @@ variable "cidr_block" {
 variable "create_internet_gateway" {
   description = "Controls if an Internet Gateway is created for public subnets and the related routes that connect them"
   type        = bool
-  default     = null
+  default     = true
 }
 
 variable "enable_dns_hostnames" {
@@ -46,19 +46,7 @@ variable "create_public_subnets" {
 variable "create_private_subnets" {
   description = "Set to true if the private subnets should be created, false otherwise"
   type        = bool
-  default     = null
-}
-
-variable "create_public_route_table" {
-  description = "Controls if an Public Route Table is created for public subnets"
-  type        = bool
-  default     = true
-}
-
-variable "create_private_route_table" {
-  description = "Controls if an Private Route Table is created for private subnets"
-  type        = bool
-  default     = null
+  default     = false
 }
 
 variable "azs" {
@@ -73,20 +61,12 @@ variable "map_public_ip_on_launch" {
   default     = null
 }
 
-########## EIP ##########
-
-variable "create_eip" {
-  description = "Set to true if the Elastic IP should be created, false otherwise"
-  type        = bool
-  default     = null
-}
-
 ########## NAT Gateway ##########
 
 variable "create_nat" {
   description = "Set to true if the NAT Gateway should be created, false otherwise"
   type        = bool
-  default     = null
+  default     = false
 }
 
 ########## Tags ##########
@@ -97,13 +77,13 @@ variable "tags" {
   default     = {}
 }
 
-variable "env" {
+variable "environment" {
   type        = string
   description = "This is an environment"
   default     = ""
 }
 
-variable "region_name" {
+variable "aws_region" {
   type        = string
   description = "This is a region name"
   default     = ""
