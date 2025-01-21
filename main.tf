@@ -1,6 +1,6 @@
 locals {
-  len_public_subnets  = max(length(var.public_subnets))
-  len_private_subnets = max(length(var.private_subnets))
+  len_public_subnets  = length(var.public_subnets)
+  len_private_subnets = length(var.private_subnets)
 }
 
 ########## AWS VPC ##########
@@ -13,7 +13,7 @@ resource "aws_vpc" "vpc" {
 
   tags = merge(
     {
-      "Name" = "${var.environment}-${var.aws_region}-vpc"
+      "Name" = "${var.env}-${var.region_name}-vpc"
     },
     var.tags,
   )
@@ -28,7 +28,7 @@ resource "aws_internet_gateway" "igw" {
 
   tags = merge(
     {
-      "Name" = "${var.environment}-${var.aws_region}-vpc-igw"
+      "Name" = "${var.env}-${var.region_name}-vpc-igw"
     },
     var.tags,
   )
@@ -42,11 +42,11 @@ resource "aws_subnet" "public" {
   vpc_id                  = aws_vpc.vpc.id
   cidr_block              = var.public_subnets[count.index]
   map_public_ip_on_launch = var.map_public_ip_on_launch
-  availability_zone       = length(regexall("^[a-z]{2}-", element(var.azs, count.index))) > 0 ? element(var.azs, count.index) : null
+  availability_zone = length(regexall("^[a-z]{2}-", element(var.azs, count.index))) > 0 ? element(var.azs, count.index) : null
 
   tags = merge(
     {
-      "Name" = format("%s-%s-vpc-public-subnet-%s", var.environment, var.aws_region, count.index + 1)
+      "Name" = format("%s-%s-vpc-public-subnet-%s", var.env, var.region_name, count.index + 1)
     },
     var.tags
   )
@@ -59,7 +59,7 @@ resource "aws_route_table" "public" {
 
   tags = merge(
     {
-      "Name" = "${var.environment}-${var.aws_region}-vpc-pblc-rtbl"
+      "Name" = "${var.env}-${var.region_name}-vpc-pblc-rtbl"
     },
     var.tags,
   )
@@ -95,7 +95,7 @@ resource "aws_subnet" "private" {
 
   tags = merge(
     {
-      "Name" = format("%s-%s-vpc-private-subnet-%s", var.environment, var.aws_region, count.index + 1)
+      "Name" = format("%s-%s-vpc-private-subnet-%s", var.env, var.region_name, count.index + 1)
     },
     var.tags,
   )
@@ -107,7 +107,7 @@ resource "aws_route_table" "private" {
 
   tags = merge(
     {
-      "Name" = "${var.environment}-${var.aws_region}-vpc-prvt-rtbl"
+      "Name" = "${var.env}-${var.region_name}-vpc-prvt-rtbl"
     },
     var.tags,
   )
@@ -141,7 +141,7 @@ resource "aws_eip" "eip" {
 
   tags = merge(
     {
-      "Name" = "nat-${var.environment}-${var.aws_region}-vpc-eip"
+      "Name" = "nat-${var.env}-${var.region_name}-vpc-eip"
     },
     var.tags,
   )
@@ -159,7 +159,7 @@ resource "aws_nat_gateway" "nat_gateway" {
 
   tags = merge(
     {
-      "Name" = "${var.environment}-${var.aws_region}-vpc-nat"
+      "Name" = "${var.env}-${var.region_name}-vpc-nat"
     },
     var.tags,
   )

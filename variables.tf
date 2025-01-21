@@ -2,7 +2,7 @@
 
 variable "cidr_block" {
   type        = string
-  description = "This represents VPC CIDR Block"
+  description = "This represents VPC CIDR block"
 }
 
 variable "create_internet_gateway" {
@@ -56,7 +56,7 @@ variable "azs" {
 }
 
 variable "map_public_ip_on_launch" {
-  description = "Specify true to indicate that instances launched into the subnet should be assigned a public IP address. Default is `false`"
+  description = "Specify true to indicate that instances launched into the subnet should be assigned a public IP address. Default is 'false'"
   type        = bool
   default     = null
 }
@@ -77,13 +77,13 @@ variable "tags" {
   default     = {}
 }
 
-variable "environment" {
+variable "env" {
   type        = string
   description = "This is an environment"
   default     = ""
 }
 
-variable "aws_region" {
+variable "region_name" {
   type        = string
   description = "This is a region name"
   default     = ""
